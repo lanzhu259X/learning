@@ -92,13 +92,13 @@ JAVA 虚拟机在执行 JAVA 程序的过程中，会把管理的内存划分为
 
     此时，JAVA 堆中将会划出一块内存来作为句柄池，reference 中存储的就是对象的句柄地址，**而句柄中包含了对象实例数据与对象类型数据各自的具体地址信息**，如下图：
 
-    ![image](java/image/jvm_gc-5.png)
+    ![image](./image/jvm_gc-5.png)
 
 2.  使用直接指针访问。
 
     此时，reference 中存储的就是对象的地址，如下图:
 
-    ![image](java/image/jvm_gc-6.png)
+    ![image](./image/jvm_gc-6.png)
 
 > 上面两种对象访问方式各有优势，
 >
