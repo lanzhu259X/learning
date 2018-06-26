@@ -1,0 +1,26 @@
+{
+  "title": "Learning-LILIANG",
+  "description": "总结学习资源",
+  "author": "Li Liang",
+  "language": "zh-hans",
+  "gitbook": "3.2.3",
+  "root": ".",
+  "styles": {
+    "website": "website.css",
+    "ebook": "ebook.css",
+    "pdf": "pdf.css",
+    "mobi": "mobi.css",
+    "epub": "epub.css"
+  },
+  "plugins": [
+    "expandable-chapters-small",
+    "splitter",
+    "github",
+    "expandable-chapters-small"
+  ],
+  "pluginsConfig": {
+    "github": {
+      "url": "https://github.com/lanzhu259X/learning"
+    }
+  }
+}
