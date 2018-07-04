@@ -1,6 +1,6 @@
 # Lombok 的使用及原理
 
-> 什么是 Lombok, Lombok 是一个可以通过简单的注解形式来帮助我们简化消除一些必须有但显得很臃肿的 Java 代码的工具，通过使用对应的注解，可以在编译源码的时候生成对应的方法。官方地址: https://projectlombok.org/， github 地址：https://github.com/rzwitserloot/lombok。
+> 什么是 Lombok, Lombok 是一个可以通过简单的注解形式来帮助我们简化消除一些必须有但显得很臃肿的 Java 代码的工具，通过使用对应的注解，可以在编译源码的时候生成对应的方法。官方地址: https://projectlombok.org/ ， github 地址：https://github.com/rzwitserloot/lombok 。
 
 Lombok 是通过注解在 Java 编译器生成代码的工具，通过使用其内置的一些注解如：@Getter, @Setter, @Data 等，可以在编译期间生成 getter，setter，构造器，builder 等代码。
 
@@ -89,7 +89,7 @@ Lombok 是通过注解在 Java 编译器生成代码的工具，通过使用其�
     }
   ```
 
-> 更多的注解以及解释，请参考官方文档：https://projectlombok.org/features/all。
+> 更多的注解以及解释，请参考官方文档：https://projectlombok.org/features/all 。
 
 **注意点:** 测试使用@Data 注解，不会覆盖自己在类中编写的 Getter/Setter 方法内容。如下代码：
 
