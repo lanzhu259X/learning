@@ -89,7 +89,7 @@ Lombok 是通过注解在 Java 编译器生成代码的工具，通过使用其�
     }
   ```
 
-  > 跟多的注解以及解释，请参考：https://projectlombok.org/features/all。
+> 更多的注解以及解释，请参考官方文档：https://projectlombok.org/features/all。
 
 **注意点:** 测试使用@Data 注解，不会覆盖自己在类中编写的 Getter/Setter 方法内容。如下代码：
 
