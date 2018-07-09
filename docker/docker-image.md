@@ -562,3 +562,76 @@ EXPOSE 指令是声明运行时容器提供服务端口，这只是一个声明�
 此外，在早期 Docker 版本中还有一个特殊的用处。以前所有容器都运行于默认桥接网络中，因此所有容器互相之间都可以直接访问，这样存在一定的安全性问题。于是有了一个 Docker 引擎参数 `--icc=false`，当指定该参数后，容器间将默认无法互访，除非互相间使用了 `--links` 参数的容器才可以互通，并且只有镜像中 EXPOSE 所声明的端口才可以被访问。这个 `--icc=false` 的用法，在引入了 `docker network` 后已经基本不用了，通过自定义网络可以很轻松的实现容器间的互联与隔离。
 
 要将 EXPOSE 和在运行时使用 `-p <宿主端口>:<容器端口>` 区分开来。`-p`，是映射宿主端口和容器端口，换句话说，就是将容器的对应端口服务公开给外界访问，而 EXPOSE 仅仅是声明容器打算使用什么端口而已，并不会自动在宿主进行端口映射。
+
+### WORKDIR 指定工作目录
+
+格式为 WORKDIR <工作目录路径>。
+
+使用 WORKDIR 指令可以来指定工作目录（或者称为当前目录），以后各层的当前目录就被改为指定的目录，如该目录不存在，WORKDIR 会帮你建立目录。
+
+之前提到一些初学者常犯的错误是把 Dockerfile 等同于 Shell 脚本来书写，这种错误的理解还可能会导致出现下面这样的错误：
+
+```shell
+RUN cd /app
+RUN echo "hello" > world.txt
+```
+
+如果将这个 Dockerfile 进行构建镜像运行后，会发现找不到 /app/world.txt 文件，或者其内容不是 hello。原因其实很简单，在 Shell 中，连续两行是同一个进程执行环境，因此前一个命令修改的内存状态，会直接影响后一个命令；而在 Dockerfile 中，这两行 RUN 命令的执行环境根本不同，是两个完全不同的容器。**这就是对 Dockerfile 构建分层存储的概念不了解所导致的错误。**
+
+之前说过 **每一个 RUN 都是启动一个容器、执行命令、然后提交存储层文件变更**。第一层 RUN cd /app 的执行仅仅是当前进程的工作目录变更，一个内存上的变化而已，其结果不会造成任何文件变更。而到第二层的时候，启动的是一个全新的容器，跟第一层的容器更完全没关系，自然不可能继承前一层构建过程中的内存变化。
+
+因此如果需要改变以后各层的工作目录的位置，那么应该使用 WORKDIR 指令。
+
+### USER 指定当前用户
+
+格式： USER <用户名>
+
+USER 指定和 WORKDIR 相似，都是改变环境状态并影响以后的层。WORKDIR 是改变工作目录，USER 则是改变之后层的执行 RUN，CMD 以及 ENTRYPOINT 这类命令的身份。
+
+当前，和 WORKDIR 一样，USER 只是帮助你切换单指定用户而已，这个用户必须是事先建立好的，否则无法切换。
+
+```shell
+RUN groupadd -r redis && useradd -r -g redis redis
+USER redis
+RUN [ "redis-sever" ]
+```
+
+如果以 root 执行的脚本，在执行期间希望改变身份，比如希望以某个已经建立好的用户来运行某个服务进程，不要使用 `su` 或者 `sudo`，这些都需要比较麻烦的配置，而且在 TTY 缺失的环境下经常出错。建议使用 `gosu`。
+
+```shell
+# 建立 redis 用户，并使用 gosu 换另一个用户执行命令
+RUN groupadd -r redis && useradd -r -g redis redis
+# 下载 gosu
+RUN wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.7/gosu-amd64" \
+    && chmod +x /usr/local/bin/gosu \
+    && gosu nobody true
+# 设置 CMD，并以另外的用户执行
+CMD [ "exec", "gosu", "redis", "redis-server" ]
+```
+
+### HEALTHCHECK 健康检查
+
+格式：
+
+- HEALTHCHECK [选项] CMD <命令>：设置检查容器健康状况的命令
+- HEALTHCHECK NONE：如果基础镜像有健康检查指令，使用这行可以屏蔽掉其健康检查指令
+
+当在一个镜像指定了 HEALTHCHECK 指令后，用其启动容器，初始状态会为 starting，在 HEALTHCHECK 指令检查成功后变为 healthy，如果连续一定次数失败，则会变为 unhealthy。
+
+HEALTHCHECK 支持下列选项：
+
+- --interval=<间隔>：两次健康检查的间隔，默认为 30 秒；
+- --timeout=<时长>：健康检查命令运行超时时间，如果超过这个时间，本次健康检查就被视为失败，默认 30 秒；
+- --retries=<次数>：当连续失败指定次数后，则将容器状态视为 unhealthy，默认 3 次。
+
+和 CMD, ENTRYPOINT 一样，HEALTHCHECK 只可以出现一次，如果写了多个，只有最后一个生效。
+
+在 HEALTHCHECK [选项] CMD 后面的命令，格式和 ENTRYPOINT 一样，分为 shell 格式，和 exec 格式。命令的返回值决定了该次健康检查的成功与否：0：成功；1：失败；2：保留，不要使用这个值。
+
+### ONBUILD 为他人做嫁衣裳
+
+格式：ONBUILD <其它指令> 。
+
+ONBUILD 是一个特殊的指令，它后面跟的是其它指令，比如 RUN, COPY 等，而这些指令，在当前镜像构建时并不会被执行。只有当以当前镜像为基础镜像，去构建下一级镜像的时候才会被执行。
+
+Dockerfile 中的其它指令都是为了定制当前镜像而准备的，唯有 ONBUILD 是为了帮助别人定制自己而准备的。
