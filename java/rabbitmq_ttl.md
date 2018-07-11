@@ -1,8 +1,8 @@
 # Rabbitmq 延时队列
 
-> 参考：https://blog.csdn.net/u014308482/article/details/53036770
-> 官方文档: https://www.rabbitmq.com/dlx.html
-> 官方文档: https://www.rabbitmq.com/ttl.html
+参考：https://blog.csdn.net/u014308482/article/details/53036770<br/>
+官方文档: https://www.rabbitmq.com/dlx.html<br/>
+官方文档: https://www.rabbitmq.com/ttl.html
 
 > “延时消息”是值当消息被发送以后，并不想让消费者立即拿到消息，而是等待指定时间后，消费者才拿到这个消息进行消费。
 
