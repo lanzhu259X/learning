@@ -75,6 +75,22 @@ docker-machine env default |Invoke-Expression
 
 > 注意：不要在 Window 中直接去复制粘贴 disk 文件，这样会在步骤 5 的时候报错的，报错，所以一定要在 VirtualBox 中去复制！
 
+## VirtualBox 共享目录到 Docker 虚拟机中
+
+在 VirtualBox 中 `设置` -> `共享文件夹` -> `新建`图标点击后，弹出的对话框中输入对应的共享目录和共享文件夹名称， 选择号权限。
+
+![文件夹共享](./image/docker-xshell_login-8.png)
+
+然后登录 default 使用以下命令可以把共享文件夹挂载到对应的 Docker 虚拟机目录下：
+
+```shell
+sudo -s
+mount -t vboxsf workspace /workspace
+mount # 查看挂载情况
+```
+
+![挂载信息](./image/docker_xshell_login-9.jpg)
+
 ## 使用远程连接工具连接 Docker
 
 安装上面方法使用的管理工具不喜欢，可以使用 XShell 远程连接工具进行管理，操作也方便。
