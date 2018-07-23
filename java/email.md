@@ -19,8 +19,6 @@ maven 的依赖:
 具体开发代码如下:
 
 ```java
-package com.yiban.sharing.utils;
-
 import com.alibaba.fastjson.JSON;
 import com.sun.mail.util.MailSSLSocketFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +41,7 @@ public class EmailClientUtil {
 
     private static final Properties E_PROPS;
     private static final Authenticator AUTHENTICATOR;
-    private static final String FROM_MAIL = "xxxxx@yibanjf.com";
+    private static final String FROM_MAIL = "xxxxx@xxx.com";
 
     static {
         E_PROPS = new Properties();
@@ -64,7 +62,7 @@ public class EmailClientUtil {
         AUTHENTICATOR = new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("xxxxx@yibanjf.com", "你的客户端授权码");
+                return new PasswordAuthentication("xxxxx@xxx.com", "你的客户端授权码");
             }
         };
     }
@@ -125,6 +123,36 @@ public class EmailClientUtil {
         message.setContent(allPart);
         message.saveChanges();
         return message;
+    }
+}
+```
+
+测试代码：
+
+```java
+import com.yiban.sharing.utils.EmailClientUtil;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
+import org.junit.jupiter.api.Test;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class EmailClientUtilTest {
+
+    @Test
+    public void sendEmailTest() {
+        List<String> toList = Arrays.asList("xxxx@163.com", "xxxx@163.com", "xxxx@xxx.com");
+        String subject = "测试邮件-" + RandomUtils.nextInt(100, 999);
+        String text = "测试邮件<br/>百度：<a href='https://www.baidu.com'></a><br/> 验证码: <strong>" + RandomStringUtils.randomNumeric(6) +"</strong> <br/>";
+        List<File> files = new ArrayList<>();
+
+        File file = new File("C:" + File.separator + "Users"+ File.separator +"Public"+ File.separator +"Pictures"+ File.separator +"Sample Pictures"+ File.separator +"app_code.b6c966.jpg");
+        files.add(file);
+
+        EmailClientUtil.sendMail(EmailClientUtil.getSession(), subject, toList, text, files);
     }
 }
 ```
