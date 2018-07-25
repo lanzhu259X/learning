@@ -383,3 +383,5 @@ public void getWXSignConfig() {
     }
 }
 ```
+
+微信签名是否正确的验证：https://mp.weixin.qq.com/debug/cgi-bin/sandbox?t=jsapisign
