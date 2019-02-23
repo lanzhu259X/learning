@@ -7,6 +7,8 @@
   - [Lombok 的使用及原理](./java/lombok.md)
   - [RabbitMQ 延时队列](./java/rabbitmq_ttl.md)
   - [JAVA 客户端发送邮件](./java/email.md)
+- [Redis](./redis/README.md)
+  - [Redis主从同步](./redis/replication.md)
 - [Docker](./docker/README.md)
   - [Docker 基本概念](./docker/docker_base.md)
   - [Docker 安装](./docker/docker_install.md)
