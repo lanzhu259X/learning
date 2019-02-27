@@ -7,6 +7,7 @@
   - [Lombok 的使用及原理](./java/lombok.md)
   - [RabbitMQ 延时队列](./java/rabbitmq_ttl.md)
   - [JAVA 客户端发送邮件](./java/email.md)
+  - [Spring Boot 策略模式案例](./java/springboot_strategyMode.md)
 - [Redis](./redis/README.md)
   - [Redis主从同步](./redis/replication.md)
 - [Docker](./docker/README.md)
