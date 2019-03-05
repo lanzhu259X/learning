@@ -8,6 +8,7 @@
   - [RabbitMQ 延时队列](./java/rabbitmq_ttl.md)
   - [JAVA 客户端发送邮件](./java/email.md)
   - [Spring Boot 策略模式案例](./java/springboot_strategyMode.md)
+  - [kafka IO 读写原理](./java/kafka_io.md)
 - [Redis](./redis/README.md)
   - [Redis主从同步](./redis/replication.md)
 - [Docker](./docker/README.md)
